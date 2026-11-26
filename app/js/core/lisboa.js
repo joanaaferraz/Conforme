@@ -21,13 +21,41 @@ async function json(url, { signal, tentativas = 2 } = {}) {
   throw ultimo;
 }
 
-/** Procura moradas em Lisboa. Devolve [{morada, detalhe, lat, lon}]. */
+/** Procura moradas em Lisboa. Devolve [{morada, detalhe, lat, lon, exacta}]. Tenta o ArcGIS e, se falhar, o Nominatim. */
 export async function procurarMorada(texto, { signal } = {}) {
   const q = String(texto || '').trim();
   if (q.length < 3) return [];
+  const comLisboa = /lisboa/i.test(q) ? q : q + ', Lisboa';
+  let erro = null;
+  try {
+    const r = await arcgis(comLisboa, signal);
+    if (r.length) return r;
+  } catch (e) { if (signal && signal.aborted) throw e; erro = e; }
+  try { return await nominatim(comLisboa, signal); }
+  catch (e) { throw erro || e; }
+}
+
+const dentroDeLisboa = (lat, lon) => { const [o, n, e, s] = GEOCODER.viewbox; return lon >= o && lon <= e && lat >= s && lat <= n; };
+
+async function arcgis(q, signal) {
+  const [o, n, e, s] = GEOCODER.viewbox;
+  const p = new URLSearchParams({ SingleLine: q, countryCode: 'PRT', maxLocations: '6', langCode: 'PT',
+    searchExtent: `${o},${s},${e},${n}`, outFields: 'Match_addr,Addr_type,Postal,Nbrhd,District,City', f: 'json' });
+  const r = await json(`${GEOCODER.arcgis}?${p}`, { signal });
+  const vistos = new Set();
+  return (r.candidates || []).filter(c => c.score >= 75 && dentroDeLisboa(c.location.y, c.location.x)).map(c => {
+    const a = c.attributes || {};
+    const partes = String(c.address || a.Match_addr || '').split(',').map(x => x.trim());
+    const morada = partes.filter(x => !/^\d{4}-\d{3}$/.test(x) && !/^lisboa$/i.test(x)).join(', ') || c.address;
+    return { morada, detalhe: [a.Nbrhd || a.District, a.Postal, 'Lisboa'].filter(Boolean).join(' · '), lat: c.location.y, lon: c.location.x,
+      exacta: /PointAddress|StreetAddress|Subaddress/i.test(a.Addr_type || '') };
+  }).filter(m => { const k = m.morada.toLowerCase(); if (vistos.has(k)) return false; vistos.add(k); return true; });
+}
+
+async function nominatim(q, signal) {
   const [o, n, e, s] = GEOCODER.viewbox;
   const p = new URLSearchParams({
-    q: /lisboa/i.test(q) ? q : q + ', Lisboa', format: 'jsonv2', addressdetails: '1', limit: '6',
+    q, format: 'jsonv2', addressdetails: '1', limit: '6',
     countrycodes: 'pt', viewbox: `${o},${n},${e},${s}`, bounded: '1', 'accept-language': 'pt-PT',
   });
   const r = await json(`${GEOCODER.url}?${p}`, { signal });

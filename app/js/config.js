@@ -1,7 +1,7 @@
 // Configuração da app Conforme. Tudo o que depende de servidores externos está aqui,
 // para poder ser mudado sem mexer no resto (e para a app nativa usar o mesmo ficheiro).
 
-export const VERSAO_APP = '0.1.0';
+export const VERSAO_APP = '0.1.1';
 
 // Formato do ficheiro que o plugin grava no OneDrive (ver schema/conforme.schema.json).
 export const FORMATO = { nome: 'conforme', versaoMaxima: 1 };
@@ -9,6 +9,9 @@ export const FORMATO = { nome: 'conforme', versaoMaxima: 1 };
 // Morada → coordenadas. Nominatim (OpenStreetMap): público, aceita pedidos de páginas web.
 // Regras de uso: no máximo 1 pedido por segundo, só quando a pessoa carrega em «Consultar».
 export const GEOCODER = {
+  // principal: ArcGIS World Geocoder (público, responde a páginas web, encontra números de porta em Lisboa)
+  arcgis: 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates',
+  // alternativa, se o primeiro falhar
   url: 'https://nominatim.openstreetmap.org/search',
   // caixa de Lisboa (oeste, norte, este, sul)
   viewbox: [-9.2305, 38.7955, -9.0865, 38.6913],

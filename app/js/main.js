@@ -109,7 +109,7 @@ function listaElementos(els, cores = new Map()) {
 function projetoDaMorada(m) { const k = norm(m); return S.projetos.find(p => p.lote && norm(p.enquadramento.morada) && (norm(p.enquadramento.morada).includes(k) || k.includes(norm(p.enquadramento.morada)))); }
 function vMorada() {
   bar('Consultar morada', 'LISBOA');
-  let h = `<form id="fq" class="search">${LUPA}<input id="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="Rua e número, ex. Rua de São Bento 100" value="${esc(S.q)}" aria-label="Morada em Lisboa"></form>
+  let h = `<form id="fq"><div class="search">${LUPA}<input id="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="Rua e número, ex. Rua de São Bento 100" value="${esc(S.q)}" aria-label="Morada em Lisboa"></div><button class="btn" type="submit" style="margin-top:8px">Consultar</button></form>
     <div class="opts"><div><label for="uso">USO</label><select id="uso">${USOS.map(u => `<option ${S.uso === u ? 'selected' : ''}>${u}</option>`).join('')}</select></div>
     <div><label for="interv">INTERVENÇÃO</label><select id="interv">${INTERVENCOES.map(u => `<option ${S.interv === u ? 'selected' : ''}>${u}</option>`).join('')}</select></div></div>`;
   const pr = S.procura;
@@ -124,8 +124,8 @@ function vMorada() {
     if (comLote.length) h += `<div class="sec-title"><span>Moradas dos teus projetos</span></div><div class="card">${comLote.map(p => `<button class="row" style="width:100%;background:none;border:none;border-bottom:1px solid var(--line);cursor:pointer;color:var(--ink);font-family:var(--font-sans);text-align:left" data-pesquisa="${esc(p.enquadramento.morada)}"><span>${esc(p.enquadramento.morada)}</span><span class="ext">›</span></button>`).join('')}</div>`;
     h += `<p class="note">A app procura a morada, consulta as camadas públicas da Câmara de Lisboa nesse ponto e cruza o resultado com as regras e a legislação do Conforme. As camadas do PDM que só existem no LXi aparecem como «por confirmar», a não ser que a morada seja de um projeto teu, lido pelo plugin.</p>`;
   }
+  if (!S.morada) return h + blocoGeral();
   const m = S.morada, c = S.consulta;
-  if (!m) return h;
   h += `<div class="sec-title"><span>Resultado</span><button class="back" data-limpar="1" style="font-size:10.5px">nova consulta</button></div>
     <div class="addr-head"><div class="a">${esc(m.morada)}</div><div class="m">${esc(m.detalhe)}<br>${m.lat.toFixed(5)}, ${m.lon.toFixed(5)} · ${esc(S.uso)} · ${esc(S.interv)}</div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px"><a class="ln" href="https://www.openstreetmap.org/?mlat=${m.lat}&mlon=${m.lon}#map=19/${m.lat}/${m.lon}" target="_blank" rel="noopener">ver no mapa ↗</a><a class="ln" href="${LXI_URL}" target="_blank" rel="noopener">abrir o LXi ↗</a></div></div>`;
@@ -156,6 +156,16 @@ async function escolher(i) {
   const r = await consultarPonto(m.lat, m.lon, { onPasso: (f, t) => { if (S.morada === m) { S.consulta.feitos = f; S.consulta.total = t; render(true); } } });
   if (S.morada !== m) return;
   S.consulta = { estado: 'ok', ...r }; render(true);
+}
+
+/** Requisitos gerais e legislação aplicável em Lisboa para o uso escolhido, mesmo sem morada ou sem resposta dos serviços. */
+function blocoGeral() {
+  const { leg, regras } = S.dados;
+  const req = requisitos(regras, { uso: S.uso, elementos: [] });
+  const la = aplicavel(leg, { uso: S.uso, elementos: [] });
+  return `<div class="sec-title"><span>Requisitos gerais · ${esc(S.uso)}</span><span>${req.length}</span></div><div class="card">${req.map(r => `<div class="req"><div class="req-t"><span>${esc(r.titulo)}</span>${pill('mute', 'geral')}</div><div class="req-v">${esc(r.texto)}</div><div class="req-s">${esc(r.artigo)}</div></div>`).join('')}</div>
+    <div class="sec-title"><span>Legislação aplicável em Lisboa</span><span>${la.length} diplomas</span></div>${legLista(la, 'g')}
+    <p class="note">Sem morada, a lista não inclui o que depende do lote (património, planos de pormenor, servidões). Consulta uma morada para a completar.</p>`;
 }
 
 /* ---------- Legislação ---------- */
