@@ -1,0 +1,585 @@
+{
+ "formato": "conforme",
+ "versao": 1,
+ "exemplo": true,
+ "exportado": "2026-11-26T09:12:00Z",
+ "plugin": "0.7.19",
+ "modelo": "Exemplo_SaoBernardo22.rvt",
+ "enquadramento": {
+  "morada": "Rua de São Bernardo, 22",
+  "cp": "1200-826",
+  "localidade": "Lisboa",
+  "freguesia": "Estrela",
+  "uso": "Habitação",
+  "intervencao": "Obra de alteração e ampliação",
+  "proc": "Licenciamento",
+  "pedido": "Pedido de licenciamento",
+  "tipoHab": "Unifamiliar"
+ },
+ "lote": {
+  "wkid": 3763,
+  "data": "exemplo",
+  "lote": {
+   "codigo": "EXEMPLO",
+   "freguesia": "Estrela",
+   "rotulo": "Rua de São Bernardo, 22",
+   "rings": [
+    [
+     [
+      -87960.0,
+      -105970.0
+     ],
+     [
+      -87948.0,
+      -105970.0
+     ],
+     [
+      -87948.0,
+      -105954.5
+     ],
+     [
+      -87960.0,
+      -105954.5
+     ],
+     [
+      -87960.0,
+      -105970.0
+     ]
+    ]
+   ]
+  },
+  "rect": [
+   -87985.0,
+   -105995.0,
+   -87923.0,
+   -105930.0
+  ],
+  "edificios": [
+   [
+    [
+     -87982.0,
+     -105970.0
+    ],
+    [
+     -87972.0,
+     -105970.0
+    ],
+    [
+     -87972.0,
+     -105954.0
+    ],
+    [
+     -87982.0,
+     -105954.0
+    ],
+    [
+     -87982.0,
+     -105970.0
+    ]
+   ],
+   [
+    [
+     -87971.0,
+     -105969.0
+    ],
+    [
+     -87961.0,
+     -105969.0
+    ],
+    [
+     -87961.0,
+     -105955.0
+    ],
+    [
+     -87971.0,
+     -105955.0
+    ],
+    [
+     -87971.0,
+     -105969.0
+    ]
+   ],
+   [
+    [
+     -87947.0,
+     -105970.0
+    ],
+    [
+     -87936.0,
+     -105970.0
+    ],
+    [
+     -87936.0,
+     -105954.0
+    ],
+    [
+     -87947.0,
+     -105954.0
+    ],
+    [
+     -87947.0,
+     -105970.0
+    ]
+   ],
+   [
+    [
+     -87935.0,
+     -105968.0
+    ],
+    [
+     -87925.0,
+     -105968.0
+    ],
+    [
+     -87925.0,
+     -105955.0
+    ],
+    [
+     -87935.0,
+     -105955.0
+    ],
+    [
+     -87935.0,
+     -105968.0
+    ]
+   ],
+   [
+    [
+     -87980.0,
+     -105948.0
+    ],
+    [
+     -87966.0,
+     -105948.0
+    ],
+    [
+     -87966.0,
+     -105936.0
+    ],
+    [
+     -87980.0,
+     -105936.0
+    ],
+    [
+     -87980.0,
+     -105948.0
+    ]
+   ],
+   [
+    [
+     -87960.0,
+     -105948.0
+    ],
+    [
+     -87944.0,
+     -105948.0
+    ],
+    [
+     -87944.0,
+     -105936.0
+    ],
+    [
+     -87960.0,
+     -105936.0
+    ],
+    [
+     -87960.0,
+     -105948.0
+    ]
+   ],
+   [
+    [
+     -87940.0,
+     -105947.0
+    ],
+    [
+     -87926.0,
+     -105947.0
+    ],
+    [
+     -87926.0,
+     -105936.0
+    ],
+    [
+     -87940.0,
+     -105936.0
+    ],
+    [
+     -87940.0,
+     -105947.0
+    ]
+   ]
+  ],
+  "eixos": [
+   [
+    [
+     -87985.0,
+     -105951.0
+    ],
+    [
+     -87923.0,
+     -105951.0
+    ]
+   ]
+  ],
+  "elementos": [
+   {
+    "servico": "PDM",
+    "camada": "Qualificação do espaço",
+    "valor": "Espaço central e habitacional · traçado urbano A",
+    "artigos": "RPDM, arts. 41.º a 46.º",
+    "rings": null,
+    "incide": true
+   },
+   {
+    "servico": "Património",
+    "camada": "Zona especial de protecção (ZEP)",
+    "valor": "ZEP da Basílica da Estrela",
+    "artigos": "RPDM, Anexo II · Portaria n.º 250/2010",
+    "rings": [
+     [
+      [
+       -87965.0,
+       -105990.0
+      ],
+      [
+       -87923.0,
+       -105988.0
+      ],
+      [
+       -87923.0,
+       -105952.0
+      ],
+      [
+       -87964.0,
+       -105952.0
+      ],
+      [
+       -87965.0,
+       -105990.0
+      ]
+     ]
+    ],
+    "incide": true
+   },
+   {
+    "servico": "Condicionantes I",
+    "camada": "Servidão aeronáutica",
+    "valor": "Aeroporto Humberto Delgado",
+    "artigos": "Planta de Condicionantes I",
+    "rings": null,
+    "incide": true
+   },
+   {
+    "servico": "PDM",
+    "camada": "Níveis arqueológicos",
+    "valor": "Nível arqueológico III",
+    "artigos": "RPDM, arts. 4.º, 26.º e 33.º",
+    "rings": [
+     [
+      [
+       -87985.0,
+       -105992.0
+      ],
+      [
+       -87940.0,
+       -105994.0
+      ],
+      [
+       -87940.0,
+       -105952.0
+      ],
+      [
+       -87985.0,
+       -105952.0
+      ],
+      [
+       -87985.0,
+       -105992.0
+      ]
+     ]
+    ],
+    "incide": true
+   },
+   {
+    "servico": "Riscos",
+    "camada": "Vulnerabilidade às inundações",
+    "valor": "Moderada",
+    "artigos": "RPDM, art. 22.º",
+    "rings": [
+     [
+      [
+       -87985.0,
+       -105950.0
+      ],
+      [
+       -87923.0,
+       -105950.0
+      ],
+      [
+       -87923.0,
+       -105930.0
+      ],
+      [
+       -87985.0,
+       -105930.0
+      ],
+      [
+       -87985.0,
+       -105950.0
+      ]
+     ]
+    ],
+    "incide": false
+   },
+   {
+    "servico": "Acessibilidades",
+    "camada": "Zonas de estacionamento",
+    "valor": "Zona C",
+    "artigos": "RPDM, art. 75.º e Anexo X",
+    "rings": null,
+    "incide": true
+   }
+  ]
+ },
+ "medicoes": {
+  "data": "2026-11-26T09:10:00",
+  "faseMedida": "Nova construção",
+  "resultados": [
+   {
+    "conceito": "Área do terreno",
+    "valor": 186.0,
+    "unidade": "m²",
+    "casas": 2,
+    "provisorio": false,
+    "metodo": ""
+   },
+   {
+    "conceito": "Área de implantação",
+    "valor": 142.6,
+    "unidade": "m²",
+    "casas": 2,
+    "provisorio": false,
+    "metodo": ""
+   },
+   {
+    "conceito": "Área de construção",
+    "valor": 398.4,
+    "unidade": "m²",
+    "casas": 2,
+    "provisorio": false,
+    "metodo": ""
+   },
+   {
+    "conceito": "Área útil",
+    "valor": 312.7,
+    "unidade": "m²",
+    "casas": 2,
+    "provisorio": false,
+    "metodo": ""
+   },
+   {
+    "conceito": "Área habitável",
+    "valor": 248.3,
+    "unidade": "m²",
+    "casas": 2,
+    "provisorio": false,
+    "metodo": ""
+   },
+   {
+    "conceito": "Volumetria",
+    "valor": 1214.0,
+    "unidade": "m³",
+    "casas": 1,
+    "provisorio": false,
+    "metodo": ""
+   },
+   {
+    "conceito": "Pisos acima da soleira",
+    "valor": 3,
+    "unidade": "",
+    "casas": 0,
+    "provisorio": false,
+    "metodo": ""
+   },
+   {
+    "conceito": "Pisos abaixo da soleira",
+    "valor": 1,
+    "unidade": "",
+    "casas": 0,
+    "provisorio": false,
+    "metodo": ""
+   },
+   {
+    "conceito": "Altura da fachada",
+    "valor": 10.85,
+    "unidade": "m",
+    "casas": 2,
+    "provisorio": false,
+    "metodo": ""
+   },
+   {
+    "conceito": "Fogos",
+    "valor": 1,
+    "unidade": "",
+    "casas": 0,
+    "provisorio": false,
+    "metodo": ""
+   },
+   {
+    "conceito": "Lugares de estacionamento",
+    "valor": 2,
+    "unidade": "",
+    "casas": 0,
+    "provisorio": false,
+    "metodo": ""
+   }
+  ],
+  "niveis": [
+   {
+    "nome": "Piso -1",
+    "cota": -3.0,
+    "areaPavimentos": 67.2,
+    "compartimentos": 3,
+    "acimaSoleira": false,
+    "contaArea": true
+   },
+   {
+    "nome": "Piso 0",
+    "cota": 0.0,
+    "areaPavimentos": 128.4,
+    "compartimentos": 6,
+    "acimaSoleira": true,
+    "contaArea": true
+   },
+   {
+    "nome": "Piso 1",
+    "cota": 3.05,
+    "areaPavimentos": 118.6,
+    "compartimentos": 7,
+    "acimaSoleira": true,
+    "contaArea": true
+   },
+   {
+    "nome": "Piso 2",
+    "cota": 6.1,
+    "areaPavimentos": 84.2,
+    "compartimentos": 3,
+    "acimaSoleira": true,
+    "contaArea": true
+   }
+  ],
+  "fogos": [
+   {
+    "fogo": "Moradia",
+    "tipologia": "4 quartos",
+    "areaBruta": 398.4,
+    "areaUtil": 312.7
+   }
+  ],
+  "avisos": [
+   "Exemplo: valores ilustrativos, não são de um projecto real."
+  ],
+  "erros": []
+ },
+ "verificacoes": [
+  {
+   "status": "fail",
+   "titulo": "Área mínima dos compartimentos habitáveis",
+   "meta": "RGEU, art. 66.º",
+   "detalhe": "Quarto 4 (piso 1): 6,10 m², mínimo 6,50 m².",
+   "artigo": "RGEU, art. 66.º",
+   "leg": "",
+   "falhas": []
+  },
+  {
+   "status": "fail",
+   "titulo": "Largura mínima dos vãos de porta",
+   "meta": "DL 163/2006, anexo, 3.3 e 4.9",
+   "detalhe": "Porta da IS do piso 2: 0,70 m de largura útil, mínimo 0,77 m.",
+   "artigo": "DL 163/2006, anexo, 3.3 e 4.9",
+   "leg": "",
+   "falhas": []
+  },
+  {
+   "status": "warn",
+   "titulo": "Iluminação natural dos compartimentos",
+   "meta": "RGEU, art. 71.º",
+   "detalhe": "Escritório (piso 2): falta o tipo de caixilho no modelo para medir a área envidraçada.",
+   "artigo": "RGEU, art. 71.º",
+   "leg": "",
+   "falhas": []
+  },
+  {
+   "status": "warn",
+   "titulo": "Zona de protecção do património",
+   "meta": "PDM Lisboa, Anexo II · Portaria 250/2010",
+   "detalhe": "O lote está em ZEP: parecer da Património Cultural, I.P.",
+   "artigo": "PDM Lisboa, Anexo II · Portaria 250/2010",
+   "leg": "",
+   "falhas": []
+  },
+  {
+   "status": "pass",
+   "titulo": "Pé-direito mínimo dos compartimentos",
+   "meta": "RGEU, art. 65.º",
+   "detalhe": "Mínimo medido 2,52 m (habitáveis) e 2,28 m (IS).",
+   "artigo": "RGEU, art. 65.º",
+   "leg": "",
+   "falhas": []
+  },
+  {
+   "status": "pass",
+   "titulo": "Área bruta mínima do fogo",
+   "meta": "RGEU, art. 67.º",
+   "detalhe": "Moradia com 4 quartos: 312,7 m².",
+   "artigo": "RGEU, art. 67.º",
+   "leg": "",
+   "falhas": []
+  },
+  {
+   "status": "pass",
+   "titulo": "Número de instalações sanitárias do fogo",
+   "meta": "RGEU, art. 68.º",
+   "detalhe": "3 instalações sanitárias.",
+   "artigo": "RGEU, art. 68.º",
+   "leg": "",
+   "falhas": []
+  },
+  {
+   "status": "pass",
+   "titulo": "Degraus das escadas (espelho e cobertor)",
+   "meta": "DL 163/2006, Anexo, secção 2.4",
+   "detalhe": "Espelho 0,175 m, cobertor 0,280 m.",
+   "artigo": "DL 163/2006, Anexo, secção 2.4",
+   "leg": "",
+   "falhas": []
+  },
+  {
+   "status": "pass",
+   "titulo": "Categoria de risco de incêndio (utilização-tipo I)",
+   "meta": "RJ-SCIE, art. 12.º e Anexo III, quadro I",
+   "detalhe": "1.ª categoria.",
+   "artigo": "RJ-SCIE, art. 12.º e Anexo III, quadro I",
+   "leg": "",
+   "falhas": []
+  }
+ ],
+ "documentos": [
+  {
+   "nome": "Memória descritiva e justificativa",
+   "estado": "gerado",
+   "nota": "Portaria 320/2026/1, Anexo V"
+  },
+  {
+   "nome": "Certidão do registo predial",
+   "estado": "falta carregar",
+   "nota": ""
+  },
+  {
+   "nome": "Termo de responsabilidade do autor",
+   "estado": "por assinar",
+   "nota": ""
+  }
+ ]
+}

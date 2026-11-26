@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Projecto Conforme (.conforme.json), versão 1",
+  "description": "Ficheiro gravado pelo plugin Conforme para Revit (Enviar para o telemóvel) e lido pela app. Campos novos podem ser acrescentados sem mudar a versão; mudar ou retirar campos obriga a subir 'versao'.",
+  "type": "object",
+  "required": ["formato", "versao", "exportado"],
+  "properties": {
+    "formato": { "const": "conforme" },
+    "versao": { "type": "integer", "minimum": 1 },
+    "exportado": { "type": "string", "format": "date-time" },
+    "plugin": { "type": "string", "description": "Versão do plugin, ex. 0.7.19" },
+    "modelo": { "type": "string", "description": "Nome do ficheiro .rvt" },
+    "exemplo": { "type": "boolean" },
+    "enquadramento": {
+      "type": "object", "description": "Respostas do 01 Enquadramento do painel",
+      "properties": { "morada": {"type": "string"}, "cp": {"type": "string"}, "localidade": {"type": "string"}, "freguesia": {"type": "string"},
+        "uso": {"type": "string"}, "intervencao": {"type": "string"}, "natureza": {"type": "string"}, "proc": {"type": "string"}, "pedido": {"type": "string"}, "tipoHab": {"type": "string"} }
+    },
+    "lote": {
+      "type": ["object", "null"], "description": "Lote lido no LXi pelo plugin (ui/lxlote.js), tal como fica no painel",
+      "properties": {
+        "wkid": {"type": "integer"}, "rect": {"type": "array", "items": {"type": "number"}},
+        "lote": {"type": "object", "properties": {"rings": {"type": "array"}}},
+        "edificios": {"type": "array"}, "eixos": {"type": "array"},
+        "elementos": {"type": "array", "items": {"type": "object", "properties": {
+          "servico": {"type": "string"}, "camada": {"type": "string"}, "valor": {"type": "string"}, "artigos": {"type": "string"},
+          "rings": {"type": ["array", "null"]}, "incide": {"type": ["boolean", "null"]} }}}
+      }
+    },
+    "medicoes": {
+      "type": ["object", "null"],
+      "properties": {
+        "data": {"type": "string"}, "faseMedida": {"type": "string"}, "moradaProjecto": {"type": "string"},
+        "resultados": {"type": "array", "items": {"type": "object", "required": ["conceito"], "properties": {
+          "conceito": {"type": "string"}, "valor": {"type": ["number", "null"]}, "unidade": {"type": "string"}, "casas": {"type": "integer"}, "provisorio": {"type": "boolean"}, "metodo": {"type": "string"} }}},
+        "niveis": {"type": "array", "items": {"type": "object", "properties": {
+          "nome": {"type": "string"}, "cota": {"type": "number"}, "areaPavimentos": {"type": "number"}, "compartimentos": {"type": "integer"}, "acimaSoleira": {"type": "boolean"}, "contaArea": {"type": "boolean"} }}},
+        "fogos": {"type": "array", "items": {"type": "object", "properties": {
+          "fogo": {"type": "string"}, "tipologia": {"type": "string"}, "areaBruta": {"type": "number"}, "areaUtil": {"type": "number"} }}},
+        "avisos": {"type": "array", "items": {"type": "string"}}, "erros": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "verificacoes": {"type": "array", "items": {"type": "object", "required": ["status", "titulo"], "properties": {
+      "status": {"enum": ["fail", "pass", "warn", "skip"]}, "titulo": {"type": "string"}, "meta": {"type": "string"}, "detalhe": {"type": "string"},
+      "artigo": {"type": "string"}, "leg": {"type": "string"}, "falhas": {"type": "array", "items": {"type": "string"}} }}},
+    "documentos": {"type": "array", "items": {"type": "object", "properties": {
+      "nome": {"type": "string"}, "estado": {"type": "string"}, "nota": {"type": "string"} }}}
+  }
+}

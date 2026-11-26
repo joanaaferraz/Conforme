@@ -1,0 +1,6 @@
+{
+  "appId": "pt.joanaferraz.conforme",
+  "appName": "Conforme",
+  "webDir": "app",
+  "ios": { "contentInset": "never" }
+}

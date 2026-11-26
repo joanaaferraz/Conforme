@@ -1,0 +1,19 @@
+{
+  "name": "conforme",
+  "version": "0.1.0",
+  "private": true,
+  "description": "App Conforme: projetos do plugin para Revit e consulta por morada em Lisboa. Web app em app/, pronta a embrulhar com Capacitor.",
+  "scripts": {
+    "servir": "npx --yes http-server app -p 8080 -c-1",
+    "ios:criar": "npx cap add ios",
+    "ios:atualizar": "npx cap sync ios",
+    "ios:abrir": "npx cap open ios"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/ios": "^7.0.0"
+  }
+}

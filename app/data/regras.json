@@ -1,0 +1,323 @@
+{
+ "versao": "2026-11-20",
+ "nota": "Regras verificáveis no modelo. Cada regra aponta para o diploma da lista de legislação da simulação (campo leg = d do diploma) e, quando depende do lote, para a camada do LXi (campo lote). Os limites são para confirmar pela Joana contra o texto legal.",
+ "regras": [
+  {
+   "id": "pe-direito",
+   "medida": "peDireito",
+   "titulo": "Pé-direito mínimo dos compartimentos",
+   "leg": "Decreto-Lei n.º 38 382, de 7 de agosto de 1951",
+   "artigo": "RGEU, art. 65.º",
+   "usos": [
+    "Habitação"
+   ],
+   "limites": {
+    "habitaveis": 2.4,
+    "outros": 2.2
+   },
+   "texto": "2,40 m nos compartimentos habitáveis; 2,20 m em I.S., circulações e arrumos"
+  },
+  {
+   "id": "areas-compartimentos",
+   "medida": "areasCompartimentos",
+   "titulo": "Área mínima dos compartimentos habitáveis",
+   "leg": "Decreto-Lei n.º 38 382, de 7 de agosto de 1951",
+   "artigo": "RGEU, art. 66.º",
+   "usos": [
+    "Habitação"
+   ],
+   "limites": {
+    "quartoCasal": 10.5,
+    "quarto": 6.5,
+    "cozinha": 6.0,
+    "salaT0": 10,
+    "salaT1": 10,
+    "salaT2": 12,
+    "salaT3": 12,
+    "salaT4": 16,
+    "salaT5": 16,
+    "salaT6": 16
+   },
+   "texto": "quarto de casal 10,5 m² · quartos 6,5 m² · cozinha 6 m² · sala 10 a 16 m² conforme a tipologia"
+  },
+  {
+   "id": "dimensoes",
+   "medida": "dimensoes",
+   "titulo": "Dimensões mínimas de quartos e corredores",
+   "leg": "Decreto-Lei n.º 38 382, de 7 de agosto de 1951",
+   "artigo": "RGEU, art. 69.º e 70.º",
+   "usos": [
+    "Habitação"
+   ],
+   "limites": {
+    "quartoCasal": 2.7,
+    "quarto": 2.1,
+    "corredor": 1.1
+   },
+   "texto": "quarto de casal 2,70 m · quartos 2,10 m · corredores 1,10 m"
+  },
+  {
+   "id": "area-bruta-fogo",
+   "medida": "areaBrutaFogo",
+   "titulo": "Área bruta mínima do fogo",
+   "leg": "Decreto-Lei n.º 38 382, de 7 de agosto de 1951",
+   "artigo": "RGEU, art. 67.º",
+   "usos": [
+    "Habitação"
+   ],
+   "limites": {
+    "T0": 35,
+    "T1": 52,
+    "T2": 72,
+    "T3": 91,
+    "T4": 105,
+    "T5": 122,
+    "T6": 134
+   },
+   "texto": "T0 35 m² · T1 52 · T2 72 · T3 91 · T4 105 · T5 122 · T6 134 m²"
+  },
+  {
+   "id": "iluminacao",
+   "medida": "iluminacao",
+   "titulo": "Iluminação natural dos compartimentos",
+   "leg": "Decreto-Lei n.º 38 382, de 7 de agosto de 1951",
+   "artigo": "RGEU, art. 71.º",
+   "usos": [
+    "Habitação"
+   ],
+   "limites": {
+    "racio": 0.1
+   },
+   "texto": "área de envidraçado ≥ 1/10 da área de salas e quartos"
+  },
+  {
+   "id": "portas",
+   "medida": "portas",
+   "titulo": "Largura mínima dos vãos de porta",
+   "leg": "Decreto-Lei n.º 163/2006, de 8 de agosto",
+   "artigo": "DL 163/2006, anexo, 3.3 e 4.9",
+   "limites": {
+    "entrada": 0.87,
+    "interior": 0.77
+   },
+   "texto": "porta de entrada 0,87 m · portas interiores 0,77 m"
+  },
+  {
+   "id": "instalacoes-sanitarias",
+   "medida": "instalacoesSanitarias",
+   "titulo": "Número de instalações sanitárias do fogo",
+   "leg": "Decreto-Lei n.º 38 382, de 7 de agosto de 1951",
+   "artigo": "RGEU, art. 68.º",
+   "usos": [
+    "Habitação"
+   ],
+   "limites": {
+    "T0": 1,
+    "T1": 1,
+    "T2": 1,
+    "T3": 2,
+    "T4": 2,
+    "T5": 2,
+    "T6": 2
+   },
+   "texto": "T0 a T2: pelo menos 1 instalação sanitária; T3 e T4: 2 (uma completa e outra com lavatório e bacia); T5 ou mais: 2 completas"
+  },
+  {
+   "id": "escadas-degraus",
+   "medida": "escadas",
+   "titulo": "Degraus das escadas (espelho e cobertor)",
+   "leg": "Decreto-Lei n.º 163/2006, de 8 de agosto",
+   "artigo": "DL 163/2006, Anexo, secção 2.4",
+   "limites": {
+    "espelhoMax": 0.18,
+    "cobertorMin": 0.28
+   },
+   "texto": "espelho até 0,18 m e cobertor de pelo menos 0,28 m (escadas de percursos acessíveis e de uso comum; no interior de moradias, referência)"
+  },
+  {
+   "id": "scie-categoria",
+   "medida": "scieCategoria",
+   "titulo": "Categoria de risco de incêndio (utilização-tipo I)",
+   "leg": "Decreto-Lei n.º 220/2008, de 12 de novembro",
+   "artigo": "RJ-SCIE, art. 12.º e Anexo III, quadro I",
+   "usos": [
+    "Habitação"
+   ],
+   "limites": {
+    "altura1": 9,
+    "abaixo1": 1,
+    "altura2": 28,
+    "abaixo2": 3,
+    "altura3": 50,
+    "abaixo3": 5
+   },
+   "texto": "UT I: 1.ª categoria até 9 m de altura e 1 piso abaixo do plano de referência; 2.ª até 28 m e 3 pisos; 3.ª até 50 m e 5 pisos; acima, 4.ª"
+  },
+  {
+   "id": "estacionamento",
+   "medida": "estacionamento",
+   "titulo": "Lugares de estacionamento",
+   "leg": "PDM / PU / PP / RMUE do município; na falta, Portaria n.º 216-B/2008 (Quadro I)",
+   "artigo": "PDM Lisboa, art. 75.º e Anexo X · Zona C",
+   "lote": "Zona de estacionamento C",
+   "usos": [
+    "Habitação"
+   ],
+   "limites": {
+    "porFogoAteT2": 1.0,
+    "porFogoT3ouMais": 1.35,
+    "m2PorLugar": 15
+   },
+   "texto": "Zona C: mín. 1,00 lugar/fogo < T3 e 1,35 lugar/fogo ≥ T3 (valores da simulação para habitação; confirmar para unifamiliar)",
+   "loteRe": "zona (de estacionamento )?c\\b|estacionamento - zona c"
+  },
+  {
+   "id": "zep",
+   "medida": "aviso",
+   "titulo": "Zona de protecção do património",
+   "leg": "Aviso n.º 11622/2012, de 30 de agosto",
+   "artigo": "PDM Lisboa, Anexo II · Portaria DG 2.ª série n.º 288/1955 · Portaria 250/2010",
+   "lote": "ZEP da Basílica da Estrela",
+   "texto": "O lote está em zona de protecção: consulta obrigatória à CCDR LVT (Cultura), com levantamento fotográfico e enquadramento da fachada.",
+   "loteRe": "zona especial de prote"
+  },
+  {
+   "id": "aeronautica",
+   "medida": "altura",
+   "titulo": "Servidão aeronáutica",
+   "leg": "Aviso n.º 11622/2012, de 30 de agosto",
+   "artigo": "PDM Lisboa, Planta de Condicionantes I · Aeroporto Humberto Delgado",
+   "lote": "Servidão aeronáutica do Aeroporto Humberto Delgado",
+   "texto": "Confirmar a cota máxima permitida pela superfície de servidão indicada; se for ultrapassada, consulta à ANAC.",
+   "loteRe": "aeroporto humberto delgado"
+  },
+  {
+   "id": "implantacao-existente",
+   "medida": "implantacao",
+   "titulo": "Implantação face ao edificado existente",
+   "leg": "Aviso n.º 11622/2012, de 30 de agosto",
+   "artigo": "PDM Lisboa, arts. 37.º a 46.º · Espaço Central e Habitacional",
+   "lote": "Espaço Central e Habitacional",
+   "limites": {
+    "existenteM2": 235.5
+   },
+   "texto": "Traçado urbano consolidado: alterações à implantação a justificar face às regras da categoria de espaço.",
+   "loteRe": "espaco central e habitacional|tracado urbano"
+  },
+  {
+   "id": "arqueologia",
+   "medida": "aviso",
+   "titulo": "Nível arqueológico III",
+   "leg": "Aviso n.º 11622/2012, de 30 de agosto",
+   "artigo": "PDM Lisboa, arts. 4.º, 26.º, 33.º",
+   "lote": "Nível Arqueológico III",
+   "texto": "Se houver intervenção no subsolo, prever os trabalhos arqueológicos do art. 33.º.",
+   "loteRe": "nivel arqueologico"
+  },
+  {
+   "id": "servidao-militar",
+   "medida": "aviso",
+   "titulo": "Servidão militar",
+   "leg": "Lei n.º 2078/1955 · Decreto-Lei n.º 45 986/1964",
+   "artigo": "Lei n.º 2078/1955 · servidão do imóvel militar (decreto próprio)",
+   "lote": "Servidão militar",
+   "texto": "O lote está abrangido por servidão militar: obras de construção sujeitas a parecer prévio do Ministério da Defesa Nacional.",
+   "loteRe": "militar"
+  },
+  {
+   "id": "inundacoes",
+   "medida": "aviso",
+   "titulo": "Vulnerabilidade a inundações",
+   "leg": "Aviso n.º 11622/2012, de 30 de agosto",
+   "artigo": "PDM Lisboa, art. 22.º · Riscos Naturais I",
+   "lote": "Vulnerabilidade a inundações",
+   "texto": "Zona de vulnerabilidade a inundações: cumprir as condições do art. 22.º do RPDM (pisos abaixo da soleira, cota de soleira e drenagem).",
+   "loteRe": "inundac"
+  },
+  {
+   "id": "acustica",
+   "medida": "acusticaMat",
+   "titulo": "Isolamento acústico — materiais da envolvente",
+   "leg": "Decreto-Lei n.º 129/2002, de 11 de maio",
+   "artigo": "RRAE, art. 5.º · zona mista (PDM, art. 21.º)",
+   "usos": [
+    "Habitação"
+   ],
+   "texto": "Índices de isolamento dos tipos de parede exterior e de vão a confirmar no projecto de condicionamento acústico."
+  },
+  {
+   "id": "reh",
+   "medida": "termica",
+   "titulo": "Comportamento térmico — envolvente (U)",
+   "leg": "Decreto-Lei n.º 101-D/2020, de 7 de dezembro",
+   "artigo": "SCE · REH · Portaria n.º 138-I/2021",
+   "usos": [
+    "Habitação"
+   ],
+   "texto": "U dos elementos da envolvente face aos valores de referência e máximos (zona I1, Lisboa).",
+   "limites": {
+    "uParedeRef": 0.5,
+    "uParedeMax": 0.7,
+    "uCoberturaRef": 0.4,
+    "uCoberturaMax": 0.5,
+    "uVaoRef": 2.8
+   }
+  },
+  {
+   "id": "reacao-fogo",
+   "medida": "reacaoFogo",
+   "titulo": "Reação ao fogo dos materiais",
+   "leg": "Portaria n.º 1532/2008, de 29 de dezembro",
+   "artigo": "RT-SCIE · reação ao fogo (Euroclasses, NP EN 13501-1)",
+   "texto": "Materiais de revestimento e de fachada com Euroclasse identificada."
+  },
+  {
+   "id": "estrutura-materiais",
+   "medida": "estruturaMat",
+   "titulo": "Materiais estruturais",
+   "leg": "NP EN 1990-1999 + Anexos Nacionais (NA)",
+   "artigo": "Eurocódigos · Despacho Normativo 21/2019 · DL 90/2021 (betão)",
+   "texto": "Materiais estruturais com classe de resistência definida."
+  },
+  {
+   "id": "redes-aguas",
+   "medida": "aguas",
+   "titulo": "Águas e esgotos — rede predial",
+   "leg": "Decreto Regulamentar n.º 23/95, de 23 de agosto",
+   "artigo": "DR 23/95 · DL 194/2009",
+   "texto": "Aparelhos sanitários e rede predial modelados."
+  },
+  {
+   "id": "eletricidade",
+   "medida": "eletricidade",
+   "titulo": "Instalações eléctricas",
+   "leg": "Decreto-Lei n.º 96/2017, de 10 de agosto",
+   "artigo": "DL 96/2017 · RTIEBT (Portaria 949-A/2006)",
+   "texto": "Quadro, aparelhagem e iluminação modelados."
+  },
+  {
+   "id": "ited",
+   "medida": "ited",
+   "titulo": "Telecomunicações (ITED)",
+   "leg": "Decreto-Lei n.º 123/2009, de 21 de maio",
+   "artigo": "DL 123/2009 · Manual ITED",
+   "texto": "Dispositivos de telecomunicações modelados."
+  },
+  {
+   "id": "gas",
+   "medida": "gas",
+   "titulo": "Instalações de gás",
+   "leg": "Decreto-Lei n.º 97/2017, de 10 de agosto",
+   "artigo": "DL 97/2017 (alt. DL 11/2023) · Portaria 424/2025/1",
+   "texto": "Aparelhos a gás e projecto de gás."
+  },
+  {
+   "id": "carregamento-ve",
+   "medida": "ve",
+   "titulo": "Carregamento de veículos eléctricos",
+   "leg": "Decreto-Lei n.º 93/2025",
+   "artigo": "DL 93/2025 · Portaria 128/2026/1",
+   "texto": "Infraestrutura de carregamento no estacionamento."
+  }
+ ]
+}
