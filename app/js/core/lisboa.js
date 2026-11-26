@@ -79,6 +79,11 @@ function rotulo(atr, preferidos) {
   return k ? atr[k].trim() : '';
 }
 
+function artigoDe(atr, c) {
+  const v = c.artigoCampo && atr[c.artigoCampo];
+  return v && String(v).trim() ? `RPDM, ${String(v).trim().replace(/^RPDM,?\s*/i, '')}` : c.artigos;
+}
+
 /** Uma camada: elementos que tocam no círculo de raio r (m) à volta do ponto. */
 async function consultarCamada(c, lat, lon, signal) {
   const p = new URLSearchParams({
@@ -86,7 +91,7 @@ async function consultarCamada(c, lat, lon, signal) {
     distance: String(c.raio || 0), units: 'esriSRUnit_Meter', outFields: '*', returnGeometry: 'false', resultRecordCount: '20', f: 'json',
   });
   const r = await json(`${c.url}/query?${p}`, { signal });
-  return (r.features || []).map(f => ({ camada: c.id, tipo: c.tipo, nome: c.nome, valor: rotulo(f.attributes || {}, c.campos), artigos: c.artigos, incide: !c.raio, fonte: 'CML · dados abertos' }));
+  return (r.features || []).map(f => ({ camada: c.id, tipo: c.tipo, nome: c.nome, valor: rotulo(f.attributes || {}, c.campos), artigos: artigoDe(f.attributes || {}, c), incide: !c.raio, fonte: 'CML · dados abertos' }));
 }
 
 /**

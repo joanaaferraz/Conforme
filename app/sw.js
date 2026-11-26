@@ -1,7 +1,7 @@
 // Guarda a app no telemóvel para abrir sem rede. As consultas aos serviços (morada, camadas) precisam sempre de rede.
-const VERSAO = 'conforme-0.1.1';
+const VERSAO = 'conforme-0.2.0';
 const BASE = ['./', 'index.html', 'css/app.css', 'manifest.webmanifest', 'js/main.js', 'js/config.js',
-  'js/core/formato.js', 'js/core/armazem.js', 'js/core/legislacao.js', 'js/core/lisboa.js', 'js/core/planta.js',
+  'js/core/formato.js', 'js/core/armazem.js', 'js/core/legislacao.js', 'js/core/lisboa.js', 'js/core/planta.js', 'js/core/cifra.js', 'js/core/remoto.js', 'vendor/jsQR.js',
   'data/legislacao.json', 'data/regras.json', 'data/exemplo.conforme.json', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSAO).then(c => c.addAll(BASE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSAO).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

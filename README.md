@@ -8,8 +8,8 @@ Web app que leva para o telemóvel o que o plugin **Conforme para Revit** recolh
 
 | Separador | O quê | De onde vêm os dados |
 | --- | --- | --- |
-| Projetos | Resumo, lote, verificação de normas, medições e documentos de cada projeto | Ficheiros `.conforme.json` gravados pelo plugin em `OneDrive\Conforme\Telemóvel` |
-| Morada | Morada → coordenadas → camadas da CML no ponto → requisitos e legislação | OpenStreetMap (Nominatim), dados abertos da CML, `regras.json` e tabela de legislação do plugin |
+| Projetos | Resumo, lote, verificação de normas, medições e documentos de cada projeto; atualizam-se sozinhos | Projetos cifrados que o plugin envia para o ramo `dados` (ligados por QR Code + senha), ou ficheiros `.conforme.json` em `OneDrive\Conforme\Telemóvel` |
+| Morada | Morada → coordenadas → camadas da CML no ponto → requisitos e legislação | ArcGIS World Geocoder / Nominatim, dados abertos da CML (incl. riscos do PDM), `regras.json` e tabela de legislação do plugin |
 | Legislação | Tabela de legislação do Conforme, com pesquisa e ligações ao DR | `app/data/legislacao.json` (do `leg-v2.js` do plugin) |
 | Ficheiros | Abrir ou atualizar projetos | App Ficheiros do iPhone (OneDrive) |
 
@@ -21,7 +21,8 @@ app/                  a web app (sem passo de compilação)
   js/main.js          interface
   js/config.js        servidores externos e camadas consultadas
   data/               legislação e regras (cópias dos ficheiros do plugin) e um projeto de exemplo
-schema/               formato do ficheiro .conforme.json (versão 1)
+schema/               formato do ficheiro .conforme.json (versão 1) e do projeto cifrado
+vendor/ (em app/)     jsQR 1.4.0 (Apache-2.0), para ler QR Codes
 docs/                 como passar a app nativa e notas sobre a consulta por morada
 capacitor.config.json para gerar o projeto iOS nativo (ver docs/NATIVO.md)
 ```

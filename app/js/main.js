@@ -1,13 +1,14 @@
 // Interface da app Conforme. Toda a lógica está em js/core (sem interface), para poder ser reaproveitada numa app nativa.
-import { VERSAO_APP, SO_NO_LXI, LXI_URL } from './config.js';
+import { VERSAO_APP, SO_NO_LXI, LXI_URL, REMOTO } from './config.js';
 import { lerProjeto, medicao, fmtNum, FormatoInvalido } from './core/formato.js';
 import * as armazem from './core/armazem.js';
 import { carregar, aplicavel, requisitos, agrupar, USOS, INTERVENCOES } from './core/legislacao.js';
 import { procurarMorada, consultarPonto, elementosDoLote } from './core/lisboa.js';
 import { plantaLote, legendaZonas } from './core/planta.js';
+import * as remoto from './core/remoto.js';
 
 const S = { tab: 'projetos', projetos: [], proj: null, seg: 'resumo', filtro: 'todas', abertos: {}, legAbertos: {}, legQ: '',
-  q: '', procura: null, morada: null, consulta: null, uso: 'Habitação', interv: 'Alteração', dados: null };
+  ligar: null, q: '', procura: null, morada: null, consulta: null, uso: 'Habitação', interv: 'Alteração', dados: null };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const urlSegura = u => (/^https:\/\//.test(u || '') ? u : '#');
@@ -40,12 +41,12 @@ function vProjetos() {
   bar('Projetos', 'CONFORME');
   if (!S.projetos.length) return `<div class="empty"><h3>Ainda não há projetos no telemóvel</h3>
     <p>No Revit, carrega em <b>Conforme › Enviar para o telemóvel</b>. O plugin grava o projeto na pasta <b>OneDrive › Conforme › Telemóvel</b>. Depois abre-o aqui.</p>
-    ${botaoAbrir()}<div style="height:8px"></div><button class="btn ghost" data-exemplo="1">Ver um projeto de exemplo</button></div>`;
+    <button class="btn" data-ligar="1">Ler QR Code do projeto</button><div style="height:8px"></div>${botaoAbrir('Abrir ficheiro .conforme.json', true)}<div style="height:8px"></div><button class="btn ghost" data-exemplo="1">Ver um projeto de exemplo</button></div>`;
   return S.projetos.map(p => { const c = contagem(p);
     return `<button class="proj" data-proj="${esc(p.id)}"><div class="proj-top"><div class="proj-name">${esc(p.nome)}</div><span class="ext">›</span></div>
-      <div class="proj-meta">${esc([p.enquadramento.intervencao || p.enquadramento.natureza, p.enquadramento.procedimento].filter(Boolean).join(' · ') || p.modelo)}<br>exportado ${esc(quando(p.exportado))}${p.exemplo ? ' · exemplo' : ''}</div>
+      <div class="proj-meta">${esc([p.enquadramento.intervencao || p.enquadramento.natureza, p.enquadramento.procedimento].filter(Boolean).join(' · ') || p.modelo)}<br>exportado ${esc(quando(p.exportado))}${p.exemplo ? ' · exemplo' : ''}${p.remoto ? `<br><span class="sync">● ligado ao Revit${p.remoto.erro ? ' · ' + esc(p.remoto.erro) : ''}</span>` : ''}</div>
       <div class="proj-stats">${p.verificacoes.length ? `${c.fail ? pill('fail', c.fail + ' não cumpre') : ''}${c.warn ? pill('warn', c.warn + ' a confirmar') : ''}${pill('ok', c.ok + ' cumpre')}` : pill('mute', 'sem verificação')}${p.lote ? pill('info', 'lote lido no LXi') : ''}</div></button>`; }).join('')
-    + `<div style="margin-top:14px">${botaoAbrir('Abrir ou atualizar projetos', true)}</div>`;
+    + `<div style="margin-top:14px;display:grid;gap:8px"><button class="btn" data-ligar="1">Ler QR Code de outro projeto</button>${botaoAbrir('Abrir ficheiro .conforme.json', true)}</div>`;
 }
 function kpi(p, conceito, rotulo) { const r = medicao(p, conceito); return `<div class="kpi"><div class="l">${esc(rotulo)}</div><div class="n ${r && r.provisorio ? 'prov' : ''}">${r ? fmtNum(r.valor, r.casas) : '—'} <small>${esc(r ? r.unidade : '')}</small></div></div>`; }
 function vProjeto() {
@@ -62,7 +63,7 @@ function vProjeto() {
       ? `<div class="card"><button class="row" style="width:100%;background:none;border:none;cursor:pointer;color:var(--ink);font-family:var(--font-sans)" data-seg="verif"><span class="k">${c.fail} não cumpre · ${c.warn} a confirmar · ${c.ok} cumpre</span><span class="ext">ver ›</span></button></div>`
       : `<p class="note">O ficheiro não traz verificações. Corre «Verificar normas» no Revit e envia de novo.</p>`);
     if (p.lote) h += `<div class="sec-title"><span>Lote</span><span>${elementosDoLote(p.lote).length} elementos LXi</span></div><div class="plan">${plantaLote(p.lote)}</div>`;
-    h += `<p class="note">Exportado ${esc(quando(p.exportado))} pelo Conforme ${esc(p.plugin)} · ${esc(p.ficheiro)}</p>
+    h += `<p class="note">Exportado ${esc(quando(p.exportado))} pelo Conforme ${esc(p.plugin)}${p.remoto ? ` · ligado ao Revit, verificado ${esc(quando(p.remoto.verificado))}` : ' · ' + esc(p.ficheiro)}</p>
       <div style="margin-top:16px"><button class="btn ghost" data-apagar="${esc(p.id)}">Retirar este projeto do telemóvel</button></div>`;
   }
   if (S.seg === 'lote') {
@@ -187,14 +188,18 @@ function vLeg() {
 function vFicheiros() {
   bar('Ficheiros', 'LIGAÇÃO AO REVIT');
   return `<div class="card"><div class="row"><span class="k">Projetos no telemóvel</span><span class="v">${S.projetos.length}</span></div>
+    <div class="row"><span class="k">Ligados ao Revit</span><span class="v">${S.projetos.filter(p => p.remoto).length}</span></div>
     <div class="row"><span class="k">Pasta no PC</span><span class="v">OneDrive › Conforme › Telemóvel</span></div>
     <div class="row"><span class="k">Versão da app</span><span class="v">${VERSAO_APP}</span></div></div>
-    <div style="margin-top:14px">${botaoAbrir()}</div>
-    <div class="sec-title"><span>Como funciona</span></div>
-    <ol class="lxi-list" style="color:var(--ink)"><li>No Revit, <b>Conforme › Enviar para o telemóvel</b>. Com «automático» ligado, o plugin volta a gravar quando o modelo muda.</li>
-    <li>No iPhone, toca em «Abrir ficheiro», escolhe <b>OneDrive</b> na app Ficheiros e a pasta <b>Conforme › Telemóvel</b>.</li>
-    <li>A app guarda uma cópia: o projeto fica disponível sem rede. Para ver uma versão nova, abre o ficheiro outra vez.</li></ol>
-    <p class="note">Se o OneDrive não aparecer em «Localizações» na app Ficheiros, instala a app OneDrive no iPhone e activa-a em Ficheiros › ··· › Editar.</p>`;
+    <div style="margin-top:14px;display:grid;gap:8px"><button class="btn" data-ligar="1">Ler QR Code do projeto</button><button class="btn ghost" data-ligar="manual">Escrever o código do projeto</button></div>
+    <div class="sec-title"><span>Com QR Code (recomendado)</span></div>
+    <ol class="lxi-list" style="color:var(--ink)"><li>No Revit, <b>Conforme › Enviar para o telemóvel</b> e depois <b>QR Code</b>.</li>
+    <li>Aqui, «Ler QR Code do projeto», aponta para o ecrã do PC e escreve a senha. Só a pedimos uma vez.</li>
+    <li>A partir daí o projeto atualiza-se sozinho: ao abrir a app e de minuto a minuto enquanto ela está aberta. Com «automático» ligado no plugin, cada alteração no modelo chega em menos de um minuto.</li></ol>
+    <p class="note">Os projetos viajam cifrados com a tua senha; sem ela ninguém os consegue ler. Lê o QR Code dentro desta app (e não com a câmara do iPhone), porque a app instalada no ecrã principal e o Safari guardam os dados em sítios diferentes.</p>
+    <div class="sec-title"><span>Com ficheiro</span></div>
+    <div>${botaoAbrir('Abrir ficheiro .conforme.json', true)}</div>
+    <p class="note">O plugin grava também uma cópia em <b>OneDrive › Conforme › Telemóvel</b>, que podes abrir pela app Ficheiros. Um projeto aberto assim não se atualiza sozinho.</p>`;
 }
 
 /* ---------- abrir ficheiros ---------- */
@@ -209,6 +214,130 @@ async function abrirFicheiros(files) {
   render();
 }
 
+/* ---------- ligar por QR Code + atualização automática ---------- */
+const modal = () => $('#modal');
+function pintarLigar() {
+  const L = S.ligar, m = modal();
+  if (!L) { m.hidden = true; m.innerHTML = ''; return; }
+  m.hidden = false;
+  let h = '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ligT">';
+  if (L.scan && !L.codigo) {
+    h += `<h3 id="ligT">Ler QR Code</h3><p class="note" style="margin-top:0">Aponta para o QR Code que o plugin mostra no Revit.</p>
+      <div class="scan"><video id="cam" playsinline muted></video><div class="mira"></div></div>
+      ${L.erro ? `<div class="err">${esc(L.erro)}</div>` : ''}
+      <div class="acoes"><button class="btn ghost" data-ligar="manual">Escrever o código</button><button class="btn ghost" data-fechar="1">Cancelar</button></div>`;
+  } else {
+    h += `<form id="fligar"><h3 id="ligT">Ligar projeto do Revit</h3>
+      ${L.codigo && !L.manual ? `<div class="code">código ${esc(L.codigo)}</div>` : `<input type="text" id="ligCod" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Código do projeto (no painel, por baixo do QR)" value="${esc(L.codigo || '')}">`}
+      <input type="password" id="ligSenha" autocomplete="current-password" placeholder="Senha" aria-label="Senha">
+      ${L.erro ? `<div class="err">${esc(L.erro)}</div>` : ''}
+      <div class="acoes"><button class="btn" type="submit" ${L.ocupado ? 'disabled' : ''}>${L.ocupado ? 'A abrir…' : 'Abrir projeto'}</button><button class="btn ghost" type="button" data-fechar="1">Cancelar</button></div></form>`;
+  }
+  m.innerHTML = h + '</div>';
+  if (L.scan && !L.codigo) iniciarCamara(); else setTimeout(() => { const i = $('#ligCod') || $('#ligSenha'); i && i.focus(); }, 50);
+}
+function abrirLigar(o) { pararCamara(); S.ligar = { ...o }; pintarLigar(); }
+function fecharLigar() { pararCamara(); S.ligar = null; pintarLigar(); }
+
+let camara = null;
+function carregarJsQR() {
+  if (window.jsQR) return Promise.resolve();
+  return new Promise((ok, erro) => { const s = document.createElement('script'); s.src = 'vendor/jsQR.js'; s.onload = ok; s.onerror = () => erro(new Error('jsQR')); document.head.appendChild(s); });
+}
+async function iniciarCamara() {
+  if (camara) return;
+  const v = $('#cam'); if (!v) return;
+  camara = { vivo: true };
+  try {
+    await carregarJsQR();
+    camara.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+    if (!camara || !camara.vivo) return;
+    v.srcObject = camara.stream; await v.play();
+    const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
+    const passo = () => {
+      if (!camara || !camara.vivo) return;
+      if (v.readyState >= 2 && v.videoWidth) {
+        const k = Math.min(1, 640 / Math.max(v.videoWidth, v.videoHeight));
+        cv.width = Math.round(v.videoWidth * k); cv.height = Math.round(v.videoHeight * k);
+        cx.drawImage(v, 0, 0, cv.width, cv.height);
+        const r = window.jsQR(cx.getImageData(0, 0, cv.width, cv.height).data, cv.width, cv.height, { inversionAttempts: 'dontInvert' });
+        if (r && r.data) {
+          const c = remoto.codigoDe(r.data);
+          if (c) { if (navigator.vibrate) navigator.vibrate(40); abrirLigar({ codigo: c }); return; }
+          S.ligar.erro = 'Este QR Code não é de um projeto do Conforme.';
+        }
+      }
+      camara.raf = requestAnimationFrame(passo);
+    };
+    passo();
+  } catch (e) {
+    pararCamara();
+    if (S.ligar) { S.ligar = { manual: true, erro: 'Não foi possível usar a câmara. Autoriza o acesso nas definições do iPhone, ou escreve o código que aparece por baixo do QR Code.' }; pintarLigar(); }
+  }
+}
+function pararCamara() {
+  if (!camara) return;
+  camara.vivo = false; cancelAnimationFrame(camara.raf);
+  if (camara.stream) camara.stream.getTracks().forEach(t => t.stop());
+  camara = null;
+}
+
+async function submeterLigar() {
+  const L = S.ligar; if (!L || L.ocupado) return;
+  const codigo = L.manual || !L.codigo ? remoto.codigoDe($('#ligCod') && $('#ligCod').value) : L.codigo;
+  const senha = $('#ligSenha').value;
+  if (!codigo) { L.erro = 'Código inválido. Copia-o tal como aparece no painel do Revit.'; pintarLigar(); return; }
+  if (!senha) { L.codigo = codigo; L.erro = 'Escreve a senha que definiste no plugin.'; pintarLigar(); return; }
+  L.codigo = codigo; L.ocupado = true; L.erro = ''; pintarLigar();
+  try {
+    const r = await remoto.buscar(codigo);
+    const { texto, chave } = await remoto.abrir(r.env, { senha });
+    const p = await guardarRemoto(codigo, texto, { etag: r.etag, chave });
+    fecharLigar(); S.projetos = await armazem.listar();
+    S.tab = 'projetos'; S.proj = p.id; S.seg = 'resumo'; render();
+    toast(`«${p.nome}» ligado. Vai atualizar-se sozinho.`);
+  } catch (e) {
+    if (!S.ligar) return;
+    S.ligar.ocupado = false; S.ligar.erro = e.message || 'Não foi possível abrir o projeto.'; pintarLigar();
+  }
+}
+async function guardarRemoto(codigo, texto, { etag, chave }) {
+  const p = lerProjeto(texto, 'GitHub');
+  p.id = 'r-' + codigo;
+  p.remoto = { codigo, etag: etag || '', chave, verificado: new Date().toISOString(), erro: '' };
+  await armazem.guardar(p);
+  return p;
+}
+
+let aSincronizar = false;
+async function sincronizar() {
+  if (aSincronizar || !navigator.onLine) return;
+  const lista = S.projetos.filter(p => p.remoto && p.remoto.chave);
+  if (!lista.length) return;
+  aSincronizar = true;
+  let mudou = [];
+  try {
+    for (const p of lista) {
+      try {
+        const r = await remoto.buscar(p.remoto.codigo, p.remoto.etag);
+        if (!r) { p.remoto.verificado = new Date().toISOString(); p.remoto.erro = ''; await armazem.guardar(p); continue; }
+        const { texto, chave } = await remoto.abrir(r.env, { chave: p.remoto.chave });
+        const novo = lerProjeto(texto, 'GitHub');
+        if (novo.exportado !== p.exportado) mudou.push(novo.nome);
+        await guardarRemoto(p.remoto.codigo, texto, { etag: r.etag, chave });
+      } catch (e) {
+        p.remoto.erro = e.senha ? 'a senha mudou: lê o QR Code de novo' : e.estado === 404 ? 'já não está no GitHub' : '';
+        await armazem.guardar(p);
+      }
+    }
+  } finally { aSincronizar = false; }
+  S.projetos = await armazem.listar();
+  if (mudou.length) toast(mudou.length === 1 ? `«${mudou[0]}» atualizado a partir do Revit` : `${mudou.length} projetos atualizados`);
+  // só volta a desenhar o ecrã se algo mudou e a pessoa não está a escrever
+  const aEscrever = document.activeElement && /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName);
+  if (mudou.length && !S.ligar && !aEscrever && !(S.consulta && S.consulta.estado === 'a consultar')) render(true);
+}
+
 /* ---------- render + eventos ---------- */
 function render(manterScroll) {
   tabs();
@@ -218,7 +347,7 @@ function render(manterScroll) {
   c.scrollTop = manterScroll ? st : 0;
 }
 document.addEventListener('click', async e => {
-  const t = e.target.closest('[data-tab],[data-proj],[data-seg],[data-voltar],[data-filtro],[data-abre],[data-escolhe],[data-limpar],[data-pesquisa],[data-exemplo],[data-apagar]');
+  const t = e.target.closest('[data-tab],[data-proj],[data-seg],[data-voltar],[data-filtro],[data-abre],[data-escolhe],[data-limpar],[data-pesquisa],[data-exemplo],[data-apagar],[data-ligar],[data-fechar]');
   if (!t) return;
   const d = t.dataset;
   if (d.tab) { if (S.tab === d.tab && d.tab === 'projetos') S.proj = null; S.tab = d.tab; render(); return; }
@@ -231,13 +360,15 @@ document.addEventListener('click', async e => {
   if (d.limpar) { S.morada = null; S.consulta = null; S.procura = null; S.q = ''; render(); return; }
   if (d.pesquisa) { pesquisar(d.pesquisa); return; }
   if (d.exemplo) { const r = await fetch('data/exemplo.conforme.json'); await abrirFicheiros([new File([await r.text()], 'exemplo.conforme.json')]); return; }
+  if (d.ligar) { abrirLigar(d.ligar === 'manual' ? { manual: true } : { scan: true }); return; }
+  if (d.fechar) { fecharLigar(); return; }
   if (d.apagar) { await armazem.apagar(d.apagar); S.projetos = await armazem.listar(); S.proj = null; toast('Projeto retirado do telemóvel'); render(); return; }
 });
 document.addEventListener('keydown', e => {
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-abre]')) { e.preventDefault(); e.target.click(); }
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.file-in .btn')) { e.preventDefault(); e.target.closest('label').querySelector('input').click(); }
 });
-document.addEventListener('submit', e => { if (e.target.id === 'fq') { e.preventDefault(); const v = $('#q').value.trim(); if (v.length >= 3) { $('#q').blur(); pesquisar(v); } } });
+document.addEventListener('submit', e => { if (e.target.id === 'fligar') { e.preventDefault(); submeterLigar(); return; } if (e.target.id === 'fq') { e.preventDefault(); const v = $('#q').value.trim(); if (v.length >= 3) { $('#q').blur(); pesquisar(v); } } });
 document.addEventListener('toggle', e => { const el = e.target; if (el.matches && el.matches('details[data-lg]') && S.legAbertos[el.dataset.lg] !== el.open) { S.legAbertos[el.dataset.lg] = el.open; render(true); } }, true);
 document.addEventListener('input', e => { if (e.target.id === 'lq') { S.legQ = e.target.value; const pos = e.target.selectionStart; render(true); const i = $('#lq'); i.focus(); i.setSelectionRange(pos, pos); } if (e.target.id === 'q') S.q = e.target.value; });
 document.addEventListener('change', e => {
@@ -251,5 +382,10 @@ document.addEventListener('change', e => {
   try { S.dados = await carregar(); } catch { $('#content').innerHTML = '<div class="err">Não foi possível carregar a legislação. Abre a app com ligação à internet pelo menos uma vez.</div>'; return; }
   S.projetos = await armazem.listar();
   render();
+  const doQr = remoto.codigoDe(location.hash);
+  if (doQr) { history.replaceState(null, '', location.pathname); abrirLigar({ codigo: doQr }); }
+  sincronizar();
+  setInterval(() => { if (document.visibilityState === 'visible') sincronizar(); }, REMOTO.intervalo);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') sincronizar(); });
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 })();
